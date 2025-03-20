@@ -1,5 +1,4 @@
 import io.qameta.allure.Step;
-import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Before;
@@ -8,14 +7,13 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.hasKey;
 
-public class LoginCourierTest {
+public class LoginCourierTest extends BaseTest{
 
     private final static String BASE_URL = "/api/v1/courier/login";
 
     @Before
-    @Step("Настройка тестового окружения и создание курьера")
+    @Step("Создание курьера")
     public void setup() {
-        RestAssured.baseURI = "https://qa-scooter.praktikum-services.ru";
         createCourier("writer", "4321", "alan");
     }
 
@@ -28,26 +26,40 @@ public class LoginCourierTest {
     }
 
     @Test
-    @Step("Вход курьера без полей пароля/логина")
-    public void testLoginCourierWithoutFields() {
+    @Step("Вход курьера без поля {password}")
+    public void testLoginCourierWithoutPassword() {
         loginWithoutField("{\"login\": \"writer\"}");
+    }
+
+    @Test
+    @Step("Вход курьера без поля {login}")
+    public void testLoginCourierWithoutLogin(){
         loginWithoutField("{\"password\": \"4321\"}");
     }
 
     @Test
-    @Step("Вход курьера с пустыми полями логина/пароля")
-    public void testLoginCourierWithoutMeaning() {
+    @Step("Вход курьера с пустым полем {password}")
+    public void testLoginCourierWithoutMeaningPassword() {
         loginCourierWithEmptyFields("{\"login\": \"writer\", \"password\": \"\"}");
+    }
+
+    @Test
+    @Step("Вход курьера с пустым полем {login}")
+    public void testLoginCourierWithoutMeaningLogin(){
         loginCourierWithEmptyFields("{\"login\": \"\",\"password\": \"4321\"}");
     }
 
     @Test
-    @Step("Вход курьера с неправильным паролем/логином")
-    public void testLoginCourierWithIncorrectLoginPassword() {
+    @Step("Вход курьера с неправильным паролем")
+    public void testLoginCourierWithIncorrectPassword() {
         loginCourier("writer", "4322")
                 .statusCode(404)
                 .body("message", equalTo("Учетная запись не найдена"));
+    }
 
+    @Test
+    @Step("Вход курьера с неправильным логином")
+    public void testLoginCourierWithIncorrectLogin(){
         loginCourier("write", "4321")
                 .statusCode(404)
                 .body("message", equalTo("Учетная запись не найдена"));

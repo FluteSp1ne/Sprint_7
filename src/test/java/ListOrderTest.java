@@ -1,19 +1,11 @@
 import io.qameta.allure.Step;
-import io.restassured.RestAssured;
-import org.junit.Before;
 import org.junit.Test;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class ListOrderTest {
+public class ListOrderTest extends BaseTest {
 
     private final static String BASE_URL = "/api/v1/orders";
-
-    @Before
-    @Step("Настройка тестового окружения")
-    public void setUp() {
-        RestAssured.baseURI = "https://qa-scooter.praktikum-services.ru";
-    }
 
     @Test
     @Step("Получение списка заказов")
