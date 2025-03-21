@@ -1,3 +1,5 @@
+package DataClass;
+
 public class CreateCourier {
     private String login;
     private String password;

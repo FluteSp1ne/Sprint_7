@@ -1,10 +1,18 @@
+package TestsClass;
+
+import StepsClass.BaseTest;
+import StepsClass.OrderSteps;
 import io.qameta.allure.Step;
+import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.Collection;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
 public class CreatingOrderTest extends BaseTest {
@@ -42,14 +50,22 @@ public class CreatingOrderTest extends BaseTest {
     public void creatingOrder() {
         String[] colorsArray = color.isEmpty() ? new String[]{} : color.split(",");
         String orderData = OrderSteps.createOrderData(FIRST_NAME, LAST_NAME, ADDRESS, METRO_STATION, PHONE, RENT_TIME, DELIVERY_DATE, COMMENT, colorsArray);
-        trackId = OrderSteps.sendOrderRequest(orderData);
+
+        Response response = OrderSteps.sendOrderRequest(orderData);
+        assertEquals(201, response.getStatusCode());
+        assertTrue(response.jsonPath().get("track") != null);
+        trackId = response.jsonPath().getString("track");
     }
+
 
     @After
     @Step("Отмена заказа")
     public void cancelOrder() {
         if (trackId != null) {
-            OrderSteps.cancelOrder(trackId);
+            Response response = OrderSteps.cancelOrder(trackId);
+            assertEquals(200, response.getStatusCode());
+            boolean ok = response.jsonPath().getBoolean("ok");
+            assertTrue(ok);
         }
     }
 }

@@ -1,3 +1,5 @@
+package DataClass;
+
 public class DeleteCourier {
     private int id;
 

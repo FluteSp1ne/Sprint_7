@@ -1,3 +1,5 @@
+package StepsClass;
+
 import io.restassured.RestAssured;
 import io.qameta.allure.Step;
 import org.junit.Before;

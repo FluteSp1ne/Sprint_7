@@ -1,10 +1,13 @@
+package StepsClass;
+
+import io.qameta.allure.Step;
+import io.restassured.response.Response;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.Matchers.hasKey;
 
 public class OrderSteps {
     private final static String BASE_URL = "/api/v1/orders";
 
+    @Step("Создание заказа")
     public static String createOrderData(String firstName, String lastName, String address, String metroStation,
                                          String phone, int rentTime, String deliveryDate, String comment, String[] colors) {
         String colorArray = String.join("\",\"", colors);
@@ -13,26 +16,26 @@ public class OrderSteps {
                 firstName, lastName, address, metroStation, phone, rentTime, deliveryDate, comment, colorArray);
     }
 
-    public static String sendOrderRequest(String orderData) {
+    @Step("Получение заказа")
+    public static Response sendOrderRequest(String orderData) {
         return given()
                 .header("Content-type", "application/json")
                 .body(orderData)
                 .when()
                 .post(BASE_URL)
                 .then()
-                .statusCode(201)
-                .body("$", hasKey("track"))
-                .extract().path("track").toString();
+                .extract().response();
     }
 
-    public static void cancelOrder(String trackId) {
-        given()
+
+    @Step("Отмена заказа по {trackId}")
+    public static Response cancelOrder(String trackId) {
+        return given()
                 .header("Content-type", "application/json")
                 .body("{\"track\": \"" + trackId + "\"}")
                 .when()
-                .put("/api/v1/orders/cancel")
+                .put("/api/v1/orders/cancel?track=" + trackId)
                 .then()
-                .statusCode(200)
-                .body("ok", equalTo(true));
+                .extract().response();
     }
 }
