@@ -1,7 +1,8 @@
-package TestsClass;
+package testsclass;
 
-import StepsClass.BaseTest;
-import StepsClass.OrderSteps;
+import dataclass.CreateOrder;
+import stepsclass.BaseTest;
+import stepsclass.OrderSteps;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.junit.After;
@@ -10,21 +11,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
 public class CreatingOrderTest extends BaseTest {
-
-    private static final String FIRST_NAME = "Alan";
-    private static final String LAST_NAME = "Wake";
-    private static final String ADDRESS = "OceanView, 0";
-    private static final String METRO_STATION = "Kaldera";
-    private static final String PHONE = "+7 903 022 10 01";
-    private static final int RENT_TIME = 5;
-    private static final String DELIVERY_DATE = "2025-09-09";
-    private static final String COMMENT = "Where are you, Alice?";
 
     private String trackId;
     private String color;
@@ -47,13 +40,16 @@ public class CreatingOrderTest extends BaseTest {
 
     @Test
     @Step("Тесты на создание заказа с разными параметрами выбора цвета")
-    public void creatingOrder() {
-        String[] colorsArray = color.isEmpty() ? new String[]{} : color.split(",");
-        String orderData = OrderSteps.createOrderData(FIRST_NAME, LAST_NAME, ADDRESS, METRO_STATION, PHONE, RENT_TIME, DELIVERY_DATE, COMMENT, colorsArray);
+    public void testCreateNewOrder() {
+        List<String> colors = Arrays.asList("BLACK", "GREY");
+        CreateOrder orderRequest = new CreateOrder("Alan", "Wake", "OceanView, 0", "Kaldera",
+                "+7 903 022 10 01", 5, "2025-09-09", "Where are you, Alice?", colors);
 
-        Response response = OrderSteps.sendOrderRequest(orderData);
+        Response response = OrderSteps.createOrder(orderRequest);
+
         assertEquals(201, response.getStatusCode());
-        assertTrue(response.jsonPath().get("track") != null);
+        assertTrue(response.jsonPath().getString("track") != null);
+
         trackId = response.jsonPath().getString("track");
     }
 

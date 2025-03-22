@@ -1,4 +1,4 @@
-package StepsClass;
+package stepsclass;
 
 import io.restassured.RestAssured;
 import io.qameta.allure.Step;

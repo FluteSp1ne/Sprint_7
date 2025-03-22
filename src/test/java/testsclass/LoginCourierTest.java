@@ -1,8 +1,9 @@
-package TestsClass;
+package testsclass;
 
-import StepsClass.BaseTest;
-import StepsClass.CourierSteps;
-import StepsClass.LoginCourierSteps;
+import dataclass.CreateCourier;
+import stepsclass.BaseTest;
+import stepsclass.CourierSteps;
+import stepsclass.LoginCourierSteps;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.junit.After;
@@ -18,7 +19,8 @@ public class LoginCourierTest extends BaseTest {
     @Before
     @Step("Создание курьера")
     public void setup() {
-        CourierSteps.createCourier("writer", "4321", "alan");
+        CreateCourier courier = new CreateCourier("writer", "4321", "alan");
+        CourierSteps.createCourier(courier);
     }
 
     @Test

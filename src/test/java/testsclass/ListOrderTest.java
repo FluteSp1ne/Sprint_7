@@ -1,7 +1,7 @@
-package TestsClass;
+package testsclass;
 
-import StepsClass.BaseTest;
-import StepsClass.ListOrderSteps;
+import stepsclass.BaseTest;
+import stepsclass.ListOrderSteps;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.junit.Test;

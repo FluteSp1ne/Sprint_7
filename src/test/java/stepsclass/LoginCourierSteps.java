@@ -1,5 +1,7 @@
-package StepsClass;
+package stepsclass;
 
+import com.google.gson.Gson;
+import dataclass.LoginCourier;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
@@ -11,9 +13,13 @@ public class LoginCourierSteps {
 
     @Step("Вход курьера с логином и паролем")
     public static ValidatableResponse loginCourier(String login, String password) {
+
+        LoginCourier loginRequest = new LoginCourier(login, password);
+        Gson gson = new Gson();
+
         return given()
                 .header("Content-type", "application/json")
-                .body(String.format("{\"login\": \"%s\", \"password\": \"%s\"}", login, password))
+                .body(gson.toJson(loginRequest))
                 .when()
                 .post(BASE_URL)
                 .then();

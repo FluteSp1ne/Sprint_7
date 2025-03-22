@@ -1,7 +1,8 @@
-package TestsClass;
+package testsclass;
 
-import StepsClass.BaseTest;
-import StepsClass.CourierSteps;
+import dataclass.CreateCourier;
+import stepsclass.BaseTest;
+import stepsclass.CourierSteps;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.junit.After;
@@ -16,7 +17,8 @@ public class CreatingCourierTest extends BaseTest {
     @Test
     @Step("Создание курьера с логином 'writer'")
     public void testCreateCourier() {
-        Response response = CourierSteps.createCourier("writer", "4321", "alan");
+        CreateCourier courier = new CreateCourier("writer", "4321", "alan");
+        Response response = CourierSteps.createCourier(courier);
         assertEquals(201, response.getStatusCode());
         boolean ok = response.jsonPath().getBoolean("ok");
         assertTrue(ok);
@@ -26,10 +28,11 @@ public class CreatingCourierTest extends BaseTest {
     @Test
     @Step("Создание курьера с дублирующимся логином")
     public void testDuplicateCourierLogin() {
-        CourierSteps.createCourier("writer", "4321", "alan");
+        CreateCourier courier = new CreateCourier("writer", "4321", "alan");
+        CourierSteps.createCourier(courier);
         isCourierCreated = true;
 
-        Response response = CourierSteps.createCourier("writer", "4321", "alan");
+        Response response = CourierSteps.createCourier(courier);
         assertEquals(409, response.getStatusCode());
         String message = response.jsonPath().getString("message");
         assertEquals("Этот логин уже используется", message);

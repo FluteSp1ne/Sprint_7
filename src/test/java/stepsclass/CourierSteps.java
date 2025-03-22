@@ -1,8 +1,8 @@
-package StepsClass;
+package stepsclass;
 
-import DataClass.CreateCourier;
-import DataClass.DeleteCourier;
-import DataClass.LoginCourier;
+import dataclass.CreateCourier;
+import dataclass.DeleteCourier;
+import dataclass.LoginCourier;
 import com.google.gson.Gson;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
@@ -12,10 +12,8 @@ public class CourierSteps {
     public final static String BASE_URL = "/api/v1/courier";
 
     @Step("Создание курьера")
-    public static Response createCourier(String login, String password, String firstName) {
-        CreateCourier courier = new CreateCourier(login, password, firstName);
+    public static Response createCourier(CreateCourier courier) {
         Gson gson = new Gson();
-
         String jsonBody = gson.toJson(courier);
 
         return given()

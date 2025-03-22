@@ -1,4 +1,4 @@
-package DataClass;
+package dataclass;
 
 public class LoginCourier {
     private String login;
